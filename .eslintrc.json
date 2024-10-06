@@ -1,0 +1,29 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true  // Разрешаем использование JSX
+      }
+    },
+    "plugins": [
+      "@typescript-eslint",
+      "react"  // Добавляем плагин React
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended"  // Рекомендуемые правила для React
+    ],
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "error",  // Ошибка при использовании 'any'
+      "react/prop-types": "off"  // Отключаем проверку PropTypes, если используете TypeScript
+    },
+    "settings": {
+      "react": {
+        "version": "detect"  // Автоматически определяет версию React
+      }
+    }
+  }
+  
