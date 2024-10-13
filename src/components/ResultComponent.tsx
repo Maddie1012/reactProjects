@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 
-const ResultsComponent = () => {
-  return (
-    <div className="results-section">
-      
-    </div>
-  );
+class ResultsComponent extends Component {
+  render(): React.ReactNode {
+    return (
+      <div className="results-section">
+        
+      </div>
+    );
+  }
 };
 
 export default ResultsComponent;

@@ -1,22 +1,17 @@
 import React, { Component } from 'react';
 
-interface SearchComponentState {
+interface State {
   searchTerm: string;
   isLoading: boolean;
   error: string | null;
-  results: any[];
 }
 
-class SearchComponent extends Component<{}, SearchComponentState> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      searchTerm: '', 
-      isLoading: false,
-      error: null,
-      results: [], 
-    };
-  }
+class SearchComponent extends Component<object, State> {
+  state: State = {
+    searchTerm: '',
+    isLoading: false,
+    error: null,
+  };
 
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ searchTerm: event.target.value });
@@ -25,18 +20,35 @@ class SearchComponent extends Component<{}, SearchComponentState> {
   handleSearch = async () => {
     const { searchTerm } = this.state;
 
-    console.log('Поиск покемона:', searchTerm);
-    
-    this.setState({ isLoading: true });
+    if (!searchTerm) {
+      this.setState({ error: 'Введите имя покемона' });
+      return;
+    }
 
+    this.setState({ isLoading: true, error: null });
+
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm.toLowerCase()}`);
+      if (!response.ok) {
+        throw new Error('Покемон не найден');
+      }
+
+      const data = await response.json();
+      console.log('Результат поиска:', data);
+    } catch (error) {
+      this.setState({ error: (error as Error).message });
+    } finally {
+      this.setState({ isLoading: false });
+    }
   };
 
-  componentDidMount() {
+  handleLoading = () => {
+    const {isLoading} = this.state;
 
-}
+  }
 
   render() {
-    const { searchTerm, isLoading, error, results } = this.state;
+    const { searchTerm, isLoading, error } = this.state;
 
     return (
       <div className="search-section">
@@ -50,9 +62,7 @@ class SearchComponent extends Component<{}, SearchComponentState> {
         <button onClick={this.handleSearch}>Поиск</button>
 
         {isLoading && <p>Загрузка...</p>}
-        
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-
+        {error && <p>{error}</p>}
       </div>
     );
   }
